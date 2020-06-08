@@ -32,16 +32,13 @@ def create_bvecs_and_bvals(bvalues, dirpshell):
     return [bvecs, bvals]
 
 
-def mask_function(dt_data, i, j, k):
+def mask_function(nodes, i, j, k):
     # check if there is a fiber or not, returns true if there is a fiber
-    fiber1 = not np.equal(dt_data[i][j][k][0], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]).all()
-    fiber2 = not np.equal(dt_data[i][j][k][1], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]).all()
-    fiber3 = not np.equal(dt_data[i][j][k][2], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]).all()
-    if fiber1 or fiber2 or fiber3:
-        return 1
-    else:
-        return 0
-
+    for a in range(len(nodes)):
+        for b in range(len(nodes[a])):
+            if nodes[a][b][0] == i and nodes[a][b][1] == j and nodes[a][b][2] == k:
+                return a + 1
+    return 0
 
 def signal_function(S0, bvecs, bvals, dt_data, nedges, i, j, k, m):
     # check if there is a fiber or not, returns true if there is a fiber
@@ -138,7 +135,7 @@ def signal_function(S0, bvecs, bvals, dt_data, nedges, i, j, k, m):
 
 
 # main part of the program which simulates the diffusion tensor data
-def simulate_dwi_calc(xsize, ysize, zsize, bvalue, dirpershell, dt_data, nedges, filename):
+def simulate_dwi_calc(xsize, ysize, zsize, bvalue, dirpershell, dt_data, nedges, filename, nodes):
     # create b vectors and values
     bvecval = create_bvecs_and_bvals(bvalue, dirpershell)
     bvecs = bvecval[0]
@@ -153,7 +150,7 @@ def simulate_dwi_calc(xsize, ysize, zsize, bvalue, dirpershell, dt_data, nedges,
             for i in range(xsize):
                 for m in range(dirs):
                     data[i, j, k, m] = signal_function(S0, bvecs, bvals, dt_data, nedges, i, j, k, m)
-                    mask[i, j, k, m] = mask_function(dt_data, i, j, k)
+                    mask[i, j, k, m] = mask_function(nodes, i, j, k)
     # set the affine
     affine = np.diag([2, 2, 2, 1])
     # make an image file from the numpy array
@@ -510,8 +507,9 @@ if __name__ == "__main__":
                                     # Start the simulation
                                     param = True
                                     while(param):
+                                        print(node_list_formatted)
                                         param = simulate_dwi_calc(int(xsize.get()), int(ysize.get()), int(zsize.get()),
-                                                                  bvals, dir_shell, dt_data[0], dt_data[2], filename.get())
+                                                                  bvals, dir_shell, dt_data[0], dt_data[2], filename.get(), node_list_formatted)
                                     messagebox.showinfo('Simulation Notification', 'Simulation successfully finished')
                                 else:
                                     messagebox.showinfo('Simulation Notification',
@@ -552,7 +550,6 @@ if __name__ == "__main__":
                 file.write(str(numnodes) + "\n")
                 for node in get_node_info():
                     if node is not None and node is not "":
-                        print(node)
                         file.write(node + "\n")
                 # write edge list
                 numedge = 0
