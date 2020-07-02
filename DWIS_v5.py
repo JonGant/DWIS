@@ -22,7 +22,7 @@ def create_bvecs_and_bvals(bvalues, dirpshell):
     bvals = []
     for i in range(len(bvalues)):
         for j in range(dirpshell[i]):
-            if i == 0:
+            if j == 0:
                 bvals.append(0)
             else:
                 bvals.append(bvalues[i])
@@ -507,7 +507,6 @@ if __name__ == "__main__":
                                     # Start the simulation
                                     param = True
                                     while(param):
-                                        print(node_list_formatted)
                                         param = simulate_dwi_calc(int(xsize.get()), int(ysize.get()), int(zsize.get()),
                                                                   bvals, dir_shell, dt_data[0], dt_data[2], filename.get(), node_list_formatted)
                                     messagebox.showinfo('Simulation Notification', 'Simulation successfully finished')
