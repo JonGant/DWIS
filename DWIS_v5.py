@@ -22,10 +22,7 @@ def create_bvecs_and_bvals(bvalues, dirpshell):
     bvals = []
     for i in range(len(bvalues)):
         for j in range(dirpshell[i]):
-            if j == 0:
-                bvals.append(0)
-            else:
-                bvals.append(bvalues[i])
+            bvals.append(bvalues[i])
     weights = np.ones((totalpoints, totalpoints))
     bvecs = multishell.optimize(len(dirpshell), dirpshell, weights)
 
