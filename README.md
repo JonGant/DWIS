@@ -5,4 +5,4 @@ This program simulates diffusion weighted images. The user is constrained to the
 
 Previous versions of the program are housed in the folder zzz_old_versions.
 
-Package Dependencies: Scipy, Nibabel, Numpy
+Package Dependencies: scipy, nibabel, numpy, tkinter, os
