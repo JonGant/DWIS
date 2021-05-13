@@ -5,4 +5,17 @@ This program simulates diffusion weighted images based on user defined ROIs and 
 
 Package Dependencies: scipy, nibabel, numpy, os, sympy
 
+Installation Instructions:
+Download package dependencies
+
+```
+pip install -r requirements.txt
+```
+
+Using Python 3 run
+
+```
+python DWIS_v8.py
+```
+
 Code written by Jonathan Gant at the University of Florida
