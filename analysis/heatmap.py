@@ -2,14 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 
-for file in list(glob.glob('nifti_images/complex/*_cp_ew.txt')):
+for file in list(glob.glob('nifti_images/jacks_cp_ew.txt')):
     sn = np.genfromtxt(file, delimiter=' ', dtype='float')
     plt.imshow(sn, cmap='hot', interpolation='nearest')
     plt.colorbar()
     plt.suptitle(file[21:-4])
     plt.savefig(file[21:-4] + ".png")
     plt.show()
-
+    node_strength = 0
+    for i in range(7):
+        node_strength += sn[0, i]
+    print(node_strength)
     # new_sn = np.zeros((6, 6))
     # for i in range(6):
     #     for j in range(6):
